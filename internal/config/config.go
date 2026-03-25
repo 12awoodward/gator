@@ -24,13 +24,13 @@ func Read() (Config, error) {
 		return Config{}, err
 	}
 
-	var config Config
+	var cfg Config
 
-	if err := json.Unmarshal(data, &config); err != nil {
+	if err := json.Unmarshal(data, &cfg); err != nil {
 		return Config{}, err
 	}
 	
-	return config, nil
+	return cfg, nil
 }
 
 func (c *Config)SetUser(userName string) (error) {
@@ -42,13 +42,13 @@ func (c *Config)SetUser(userName string) (error) {
 	return nil
 }
 
-func write(config Config) (error) {
+func write(cfg Config) (error) {
 	filePath, err := getConfigFilePath()
 	if err != nil {
 		return err
 	}
 
-	data, err := json.Marshal(config)
+	data, err := json.Marshal(cfg)
 	if err != nil {
 		return err
 	}
