@@ -18,11 +18,12 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	
+
 	cmds := commands{allCommands: map[string]func(*state, command) error{}}
 
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
 
 	args := []string{}
 
