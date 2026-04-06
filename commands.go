@@ -1,13 +1,18 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/12awoodward/gator/internal/config"
+	"github.com/12awoodward/gator/internal/database"
+	"github.com/google/uuid"
 )
 
 type state struct {
+	db *database.Queries
 	cfg *config.Config
 }
 
@@ -41,10 +46,36 @@ func handlerLogin(s *state, cmd command) error {
 		return errors.New("no username given")
 	}
 
-	if err := s.cfg.SetUser(cmd.args[0]); err != nil {
+	user, err := s.db.GetUser(context.Background(), cmd.args[0])
+	if err != nil {
+		return err
+	}
+
+	if err := s.cfg.SetUser(user.UserName); err != nil {
 		return err
 	}
 
 	fmt.Printf("User set to: %s\n", cmd.args[0])
+	return nil
+}
+
+func handlerRegister(s *state, cmd command) error {
+	if len(cmd.args) == 0 {
+		return errors.New("name must be provided")
+	}
+
+	user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserName: cmd.args[0],
+	})
+	if err != nil {
+		return err
+	}
+
+	s.cfg.SetUser(cmd.args[0])
+
+	fmt.Printf("user was created.\n%v\n", user)
 	return nil
 }
