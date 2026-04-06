@@ -12,7 +12,7 @@ import (
 )
 
 type state struct {
-	db *database.Queries
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -105,5 +105,17 @@ func handlerReset(s *state, cmd command) error {
 	}
 
 	fmt.Println("users reset")
+	return nil
+}
+
+func handlerAgg(s *state, cmd command) error {
+	feedURL := "https://wagslane.dev/index.xml"
+
+	feed, err := fetchFeed(context.Background(), feedURL)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%v\n", feed)
 	return nil
 }
