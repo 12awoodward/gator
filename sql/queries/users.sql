@@ -6,5 +6,8 @@ VALUES ($1, $2, $3, $4) RETURNING *;
 SELECT * FROM users
 WHERE user_name = $1;
 
+-- name: GetUsers :many
+SELECT * FROM users;
+
 -- name: DeleteUsers :exec
 DELETE FROM users;

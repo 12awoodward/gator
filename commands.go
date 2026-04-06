@@ -80,12 +80,30 @@ func handlerRegister(s *state, cmd command) error {
 	return nil
 }
 
+func handlerUsers(s *state, cmd command) error {
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, user := range users {
+		userText := "* " + user.UserName
+
+		if user.UserName == s.cfg.CurrentUserName {
+			userText += " (current)"
+		}
+		fmt.Println(userText)
+	}
+
+	return nil
+}
+
 func handlerReset(s *state, cmd command) error {
 	err := s.db.DeleteUsers(context.Background())
 	if err != nil {
 		return err
 	}
-	
+
 	fmt.Println("users reset")
 	return nil
 }
