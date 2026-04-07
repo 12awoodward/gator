@@ -49,7 +49,7 @@ func (q *Queries) CreateFeed(ctx context.Context, arg CreateFeedParams) (Feed, e
 }
 
 const getFeeds = `-- name: GetFeeds :many
-SELECT feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, users.id AS user_id, users.user_name
+SELECT feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, feeds.user_id, users.user_name
 FROM feeds LEFT JOIN users ON feeds.user_id = users.id
 `
 
@@ -59,7 +59,7 @@ type GetFeedsRow struct {
 	UpdatedAt time.Time
 	Name      string
 	Url       string
-	UserID    uuid.NullUUID
+	UserID    uuid.UUID
 	UserName  sql.NullString
 }
 
