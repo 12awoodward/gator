@@ -27,6 +27,8 @@ func main() {
 	cmds.register("users", handlerUsers)
 	cmds.register("addfeed", handlerAddFeed)
 	cmds.register("feeds", handlerFeeds)
+	cmds.register("follow", handlerFollow)
+	cmds.register("following", handlerFollowing)
 	cmds.register("agg", handlerAgg)
 
 	args := []string{}
