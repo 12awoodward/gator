@@ -228,13 +228,22 @@ func handlerUnfollow(s *state, cmd command, user database.User) error {
 }
 
 func handlerAgg(s *state, cmd command) error {
-	feedURL := "https://wagslane.dev/index.xml"
+	if len(cmd.args) < 1 {
+		return errors.New("include time between requests")
+	}
 
-	feed, err := fetchFeed(context.Background(), feedURL)
+	
+	time_between_reqs, err := time.ParseDuration(cmd.args[0])
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("%v\n", feed)
-	return nil
+	fmt.Printf("Collecting feeds every %v\n", time_between_reqs.String())
+
+	ticker := time.NewTicker(time_between_reqs)
+	for ; ; <-ticker.C {
+		scrapeFeeds(s)
+	}
+
+	// return nil
 }
