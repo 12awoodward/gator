@@ -15,7 +15,7 @@ import (
 func main() {
 	s, err := initialStateSetup()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
@@ -30,6 +30,7 @@ func main() {
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", handlerFollowing)
 	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
+	cmds.register("browse", middlewareLoggedIn(handlerBrowse))
 	cmds.register("agg", handlerAgg)
 
 	args := []string{}
@@ -44,7 +45,7 @@ func main() {
 	cmd := command{name: os.Args[1], args: args}
 
 	if err := cmds.run(s, cmd); err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 }

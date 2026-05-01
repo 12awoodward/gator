@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/12awoodward/gator/internal/config"
@@ -224,6 +225,30 @@ func handlerUnfollow(s *state, cmd command, user database.User) error {
 	}
 
 	fmt.Printf("unfollowed: %v\n", feed.Name)
+	return nil
+}
+
+func handlerBrowse(s *state, cmd command, user database.User) error {
+	limit := 2
+	if len(cmd.args) >= 1 {
+		parsed, err := strconv.Atoi(cmd.args[0])
+		if err != nil {
+			return errors.New("post limit must be s number")
+		}
+		limit = parsed
+	}
+
+	posts, err := s.db.GetPostsForUser(context.Background(), database.GetPostsForUserParams{
+		ID: user.ID,
+		Limit: int32(limit),
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, post := range posts {
+		fmt.Printf("%v, %v, %v\n%v\n\n", post.Title.String, post.Url, post.PublishedAt.Time, post.Description.String)
+	}
 	return nil
 }
 

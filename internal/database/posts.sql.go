@@ -26,7 +26,7 @@ type CreatePostParams struct {
 	Url         string
 	Description sql.NullString
 	PublishedAt sql.NullTime
-	FeedID      uuid.NullUUID
+	FeedID      uuid.UUID
 }
 
 func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, error) {
@@ -58,7 +58,7 @@ const getPostsForUser = `-- name: GetPostsForUser :many
 SELECT posts.id, posts.created_at, posts.updated_at, posts.title, posts.url, posts.description, posts.published_at, posts.feed_id, feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, feeds.user_id, feeds.last_fetched_at
 FROM feed_follows INNER JOIN users ON feed_follows.user_id = users.id
 INNER JOIN feeds ON feed_follows.feed_id = feeds.id
-INNER JOIN posts ON posts.feed_id = feed.id
+INNER JOIN posts ON posts.feed_id = feeds.id
 WHERE users.id = $1
 ORDER BY posts.published_at DESC
 LIMIT $2
@@ -77,7 +77,7 @@ type GetPostsForUserRow struct {
 	Url           string
 	Description   sql.NullString
 	PublishedAt   sql.NullTime
-	FeedID        uuid.NullUUID
+	FeedID        uuid.UUID
 	ID_2          uuid.UUID
 	CreatedAt_2   time.Time
 	UpdatedAt_2   time.Time

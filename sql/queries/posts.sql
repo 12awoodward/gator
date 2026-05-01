@@ -6,7 +6,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
 SELECT posts.*, feeds.*
 FROM feed_follows INNER JOIN users ON feed_follows.user_id = users.id
 INNER JOIN feeds ON feed_follows.feed_id = feeds.id
-INNER JOIN posts ON posts.feed_id = feed.id
+INNER JOIN posts ON posts.feed_id = feeds.id
 WHERE users.id = $1
 ORDER BY posts.published_at DESC
 LIMIT $2;

@@ -2,11 +2,17 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"encoding/xml"
 	"fmt"
 	"html"
 	"io"
 	"net/http"
+	"strings"
+	"time"
+
+	"github.com/12awoodward/gator/internal/database"
+	"github.com/google/uuid"
 )
 
 type RSSFeed struct {
@@ -84,7 +90,32 @@ func scrapeFeeds(s *state) {
 	}
 
 	fmt.Println(feed.Channel.Title)
+	
+	valid_formats := []string{"Mon, 02 Jan 2006 15:04:05 -0700"}
 	for _, item := range feed.Channel.Item {
-		fmt.Printf("- %v\n", item.Title)
+		pubDate := sql.NullTime{}
+		for _, format := range valid_formats{
+			date, err := time.Parse(format, item.PubDate)
+			if err == nil {
+				pubDate.Time = date
+				break
+			}
+		}
+
+		_, err := s.db.CreatePost(context.Background(), database.CreatePostParams{
+			ID: uuid.New(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			Title: sql.NullString{String: item.Title},
+			Url: item.Link,
+			Description: sql.NullString{String: item.Description},
+			PublishedAt: pubDate,
+			FeedID: toFetch.ID,
+		})
+		if err != nil {
+			if !strings.Contains(err.Error(), "23505") {
+				fmt.Println(err.Error())
+			}
+		}
 	}
 }
