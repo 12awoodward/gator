@@ -4,7 +4,18 @@ A blog Aggregator, allows multiple users to keep track of feeds and view latest 
 
 ## Using Gator
 
-You can use Gator in the command line using the following commands.
+You can use Gator in the command line using the following commands:
+- [login](#login)
+- [register](#register)
+- [reset](#reset)
+- [users](#users)
+- [addfeed](#addfeed)
+- [feeds](#feeds)
+- [follow](#follow)
+- [following](#following)
+- [unfollow](#unfollow)
+- [browse](#browse)
+- [agg](#agg)
 
 ### register
 
@@ -80,7 +91,7 @@ gator browse [<amount>]
 ```
 Will show most recent post information for all the current users followed feeds. It will show up to the amount given, or 2 if not provided.
 
-The `gator agg` command should be run, to ensure the latest information is available.
+The [`gator agg`](#agg) command should be run, to ensure the latest information is available.
 
 ### reset
 
