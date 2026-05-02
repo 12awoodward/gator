@@ -98,6 +98,7 @@ func scrapeFeeds(s *state) {
 			date, err := time.Parse(format, item.PubDate)
 			if err == nil {
 				pubDate.Time = date
+				pubDate.Valid = true
 				break
 			}
 		}
@@ -106,9 +107,9 @@ func scrapeFeeds(s *state) {
 			ID: uuid.New(),
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
-			Title: sql.NullString{String: item.Title},
+			Title: sql.NullString{String: item.Title, Valid: true},
 			Url: item.Link,
-			Description: sql.NullString{String: item.Description},
+			Description: sql.NullString{String: item.Description, Valid: true},
 			PublishedAt: pubDate,
 			FeedID: toFetch.ID,
 		})

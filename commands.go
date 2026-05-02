@@ -233,7 +233,7 @@ func handlerBrowse(s *state, cmd command, user database.User) error {
 	if len(cmd.args) >= 1 {
 		parsed, err := strconv.Atoi(cmd.args[0])
 		if err != nil {
-			return errors.New("post limit must be s number")
+			return errors.New("post limit must be a number")
 		}
 		limit = parsed
 	}
@@ -247,7 +247,7 @@ func handlerBrowse(s *state, cmd command, user database.User) error {
 	}
 
 	for _, post := range posts {
-		fmt.Printf("%v, %v, %v\n%v\n\n", post.Title.String, post.Url, post.PublishedAt.Time, post.Description.String)
+		fmt.Printf("\n%v, %v\n %v\n\n%v\n\n", post.Title.String, post.Url, post.PublishedAt.Time, post.Description.String)
 	}
 	return nil
 }
